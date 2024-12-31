@@ -123,6 +123,134 @@
   </nav>
   <!--/ Nav End /-->
 
+
+<!-- New Year Greeting Section -->
+<div id="newYearGreeting" class="new-year-greeting">
+  <canvas id="fireworksCanvas"></canvas>
+  <div class="greeting-content">
+    <h1 class="greeting-text">🎉 Happy New Year 2025! 🎉</h1>
+  </div>
+</div>
+
+<style>
+  .new-year-greeting {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  #fireworksCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+
+  .greeting-content {
+    text-align: center;
+    color: #fff;
+  }
+
+  .greeting-text {
+    font-size: 3rem;
+    animation: glow 1.5s infinite alternate;
+  }
+
+  @keyframes glow {
+    0% {
+      text-shadow: 0 0 10px #fff, 0 0 20px #ff0000, 0 0 30px #ff0000, 0 0 40px #ff4500, 0 0 50px #ff4500;
+    }
+    100% {
+      text-shadow: 0 0 20px #fff, 0 0 30px #ff4500, 0 0 40px #ff4500, 0 0 50px #ff6347, 0 0 60px #ff6347;
+    }
+  }
+</style>
+
+<!-- Include JavaScript for Fireworks -->
+<script>
+  const canvas = document.getElementById('fireworksCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const fireworks = [];
+  const colors = ['#ff0000', '#ff4500', '#ff6347', '#ffd700', '#00ff00', '#1e90ff', '#9400d3'];
+
+  class Firework {
+    constructor(x, y, color) {
+      this.x = x;
+      this.y = y;
+      this.color = color;
+      this.sparks = Array.from({ length: 50 }, () => ({
+        x: 0,
+        y: 0,
+        dx: Math.random() * 4 - 2,
+        dy: Math.random() * 4 - 2,
+        life: Math.random() * 40 + 20,
+      }));
+    }
+
+    update() {
+      this.sparks.forEach((spark) => {
+        spark.x += spark.dx;
+        spark.y += spark.dy;
+        spark.life -= 1;
+      });
+      this.sparks = this.sparks.filter((spark) => spark.life > 0);
+    }
+
+    draw() {
+      this.sparks.forEach((spark) => {
+        ctx.beginPath();
+        ctx.arc(this.x + spark.x, this.y + spark.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      });
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    fireworks.forEach((firework, i) => {
+      firework.update();
+      firework.draw();
+      if (firework.sparks.length === 0) {
+        fireworks.splice(i, 1);
+      }
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  function launchFirework() {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height / 2;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    fireworks.push(new Firework(x, y, color));
+  }
+
+  setInterval(launchFirework, 300);
+  animate();
+
+  // Remove the greeting section after 5 seconds
+  setTimeout(() => {
+    document.getElementById("newYearGreeting").style.display = "none";
+  }, 5000);
+</script>
+<!-- New Year Greeting Section end -->
+
+  
   <!--/ Carousel Star /-->
   <div class="intro intro-carousel">
     <div id="carousel" class="owl-carousel owl-theme">
