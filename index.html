@@ -784,6 +784,28 @@
 
   <!-- Template Main Javascript File -->
   <script src="js/main.js"></script>
+<script>
+    // Function to fetch the content of notification.html and show it as an alert
+    function showNotification() {
+      fetch('notification.html')
+        .then(response => response.text())
+        .then(html => {
+          // Extract notification content from the fetched HTML
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = html;
+          const notification = tempDiv.querySelector('#appNotification')?.innerText || 
+                               'Download the QuestHuts App from Google Play Store(Coming Soon).';
 
+          // Display the content as an alert
+          alert(notification);
+        })
+        .catch(error => {
+          console.error('Error fetching notification:', error);
+        });
+    }
+
+    // Show the notification after 15 seconds
+    setTimeout(showNotification, 15000);
+  </script>
 </body>
 </html>
